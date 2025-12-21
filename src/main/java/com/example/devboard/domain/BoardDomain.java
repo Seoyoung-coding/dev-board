@@ -1,21 +1,18 @@
 package com.example.devboard.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
-
+import jakarta.persistence.*;
+import lombok.*;
 import java.time.LocalDateTime;
 
-@Data
+@Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("board")
 
 public class BoardDomain {
     @Id
-    // 필드 작성
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String title;

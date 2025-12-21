@@ -1,0 +1,9 @@
+POST http://localhost:8080/api/boards
+Content-Type: application/json
+
+{
+  "name": "홍길동",
+  "title": "테스트",
+  "content": "내용",
+  "password": "1234"
+}
