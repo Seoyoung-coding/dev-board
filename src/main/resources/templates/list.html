@@ -2,45 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>My Dev Log</title>
+    <title>Dev Log - List</title>
     <style>
-        body { background-color: #f9f9f9; font-family: 'Apple SD Gothic Neo', sans-serif; color: #333; }
-        .container { max-width: 700px; margin: 50px auto; padding: 0 20px; }
-        h1 { font-size: 28px; border-bottom: 2px solid #00c73c; padding-bottom: 10px; color: #00c73c; }
-
-        /* 카드 스타일 */
-        .post-card {
-            background: white; border: 1px solid #eee; border-radius: 8px;
-            padding: 25px; margin-bottom: 20px; transition: 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;
-        }
-        .post-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-
-        .post-title { font-size: 22px; font-weight: bold; margin-bottom: 10px; color: #000; }
-        .post-content { font-size: 16px; color: #666; line-height: 1.6; margin-bottom: 15px; }
-        .post-meta { font-size: 13px; color: #999; display: flex; gap: 10px; }
-        .author { color: #333; font-weight: 500; }
-
-        .btn-write {
-            display: inline-block; background: #00c73c; color: white;
-            padding: 10px 20px; border-radius: 5px; text-decoration: none;
-            float: right; font-weight: bold; margin-bottom: 20px;
-        }
+        body { background-color: #f2f4f7; font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; }
+        .nav-bar { background-color: white; border-bottom: 1px solid #e5e5e5; padding: 15px 0; text-align: center; margin-bottom: 30px; }
+        .nav-bar h1 { color: #03C75A; margin: 0; font-size: 28px; letter-spacing: -1px; cursor: pointer; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-write { background-color: #03C75A; color: white; padding: 10px 20px; text-decoration: none; border-radius: 3px; font-weight: bold; font-size: 14px; }
+        .post-link { text-decoration: none; color: inherit; display: block; margin-bottom: 15px; }
+        .post-card { background: white; border: 1px solid #ebecef; padding: 25px; border-radius: 8px; transition: all 0.2s ease; }
+        .post-card:hover { border-color: #03C75A; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .post-title { font-size: 20px; font-weight: bold; color: #333; margin: 0 0 12px 0; }
+        .post-content { color: #666; font-size: 15px; margin-bottom: 15px; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .post-meta { font-size: 13px; color: #999; border-top: 1px solid #f2f2f2; padding-top: 15px; }
     </style>
 </head>
 <body>
+<div class="nav-bar">
+    <h1 onclick="location.href='/board/list'"> Dev Log</h1>
+</div>
 <div class="container">
-    <a href="#" class="btn-write">글쓰기</a>
-    <h1>개발 로그</h1>
-
-    <div th:each="board : ${boardList}" class="post-card">
-        <div class="post-title" th:text="${board.title}">게시글 제목</div>
-        <div class="post-content" th:text="${board.content}">블로그 본문 미리보기 내용</div>
-        <div class="post-meta">
-            <span class="author" th:text="${board.name}">홍길동</span>
-            <span th:text="${#temporals.format(board.createTime, 'yyyy. MM. dd. HH:mm')}">2025. 12. 21.</span>
-        </div>
+    <div class="header-area">
+        <span style="font-weight: bold; color: #333;">All Posts</span>
+        <a href="/board/write" class="btn-write">Write</a>
     </div>
+
+    <a th:each="board : ${boardList}" th:href="@{/board/view(id=${board.id})}" class="post-link">
+        <div class="post-card">
+            <h2 class="post-title" th:text="${board.title}">Post Title</h2>
+            <div class="post-content" th:text="${board.content}">Content preview...</div>
+            <div class="post-meta">
+                <span th:text="${board.name}" style="color: #333; font-weight: bold;">Author</span> ·
+                <span th:text="${#temporals.format(board.createTime, 'yyyy. MM. dd.')}">2025. 12. 27.</span>
+            </div>
+        </div>
+    </a>
 </div>
 </body>
 </html>

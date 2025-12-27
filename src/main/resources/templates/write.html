@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Write Post</title>
+    <style>
+        body { margin: 0; font-family: 'Apple SD Gothic Neo', sans-serif; }
+        .write-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #eee; }
+        .logo { color: #03C75A; font-weight: bold; font-size: 20px; cursor: pointer; }
+        .btn-submit { background-color: #03C75A; color: white; border: none; padding: 8px 20px; border-radius: 3px; font-weight: bold; cursor: pointer; }
+        .editor-area { max-width: 800px; margin: 40px auto; }
+        input.title-input { width: 100%; border: none; font-size: 35px; border-bottom: 1px solid #f2f2f2; padding-bottom: 15px; margin-bottom: 20px; outline: none; }
+        .info-inputs { margin-bottom: 20px; }
+        .info-inputs input { border: 1px solid #ddd; padding: 8px; border-radius: 3px; margin-right: 10px; outline-color: #03C75A; }
+        textarea.content-input { width: 100%; border: none; min-height: 500px; font-size: 16px; outline: none; resize: none; line-height: 1.8; }
+    </style>
+</head>
+<body>
+<form action="/board/write" method="post">
+    <div class="write-header">
+        <span class="logo" onclick="location.href='/board/list'">🚀 Dev Log</span>
+        <button type="submit" class="btn-submit">Publish</button>
+    </div>
+    <div class="editor-area">
+        <input type="text" name="title" class="title-input" placeholder="Enter title" required>
+        <div class="info-inputs">
+            <input type="text" name="name" placeholder="Author" required>
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <textarea name="content" class="content-input" placeholder="Write your story..."></textarea>
+    </div>
+</form>
+</body>
+</html>
