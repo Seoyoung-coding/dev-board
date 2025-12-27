@@ -1,19 +1,39 @@
-# 개발 목록
-DAY1 구현할 기능 목록
-✅ 글 등록 - 이름, 제목, 암호, 본문 입력 - 등록일, ID 자동 생성
-✅글 목록 보기 - 최신글 우선 표시 - ID, 제목, 이름, 등록일(YYYY/MM/DD) 표시
-✅ 글 상세 조회 - 암호는 숨김 처리 - 등록일 상세 표시 (YYYY/MM/DD HH:mm)
-✅ 글 수정 - 이름, 제목, 본문 수정 가능 - 암호 확인 필수 - 수정일 자동 저장
-✅ 글 삭제 - 암호 확인 필수
+# 🛠 개발 목록
 
-DAY2 구현할 기능 목록
- 로그인 - 이름, 제목, 암호, 본문 입력 - 등록일, ID 자동 생성
- 로그아웃  - 최신글 우선 표시 - ID, 제목, 이름, 등록일(YYYY/MM/DD) 표시
- 회원가입 - 암호는 숨김 처리 - 등록일 상세 표시 (YYYY/MM/DD HH:mm)
- 회원 탈퇴 - 이름, 제목, 본문 수정 가능 - 암호 확인 필수 - 수정일 자동 저장
+### 📅 DAY 1: 기본 게시판 기능 구현
+- ✅ **글 등록**
+    - 이름, 제목, 암호, 본문 입력
+    - 등록일, ID 자동 생성
+- ✅ **글 목록 보기**
+    - 최신글 우선 표시
+    - ID, 제목, 이름, 등록일(YYYY/MM/DD) 표시
+- ✅ **글 상세 조회**
+    - 암호는 숨김 처리
+    - 등록일 상세 표시 (YYYY/MM/DD HH:mm)
+- ✅ **글 수정**
+    - 이름, 제목, 본문 수정 가능
+    - 암호 확인 필수 / 수정일 자동 저장
+- ✅ **글 삭제**
+    - 암호 확인 필수
 
-DAY3 구현할 기능 목록
-배포
+---
+
+### 📅 DAY 2: 회원 관리 기능 구현
+- ⬜ **로그인**
+    - 아이디, 암호 입력 및 검증
+- ⬜ **로그아웃**
+    - 세션/토큰 만료 처리
+- ⬜ **회원가입**
+    - 사용자 정보 등록
+    - 가입일 자동 저장
+- ⬜ **회원 탈퇴**
+    - 본인 확인 및 데이터 삭제
+
+---
+
+### 📅 DAY 3: 배포 및 마무리
+- 🚀 **배포**
+    - 클라우드 환경 설정 및 서비스 공개
 
 
 # DAY 1 - 게시판 기능 구현하기 
@@ -81,8 +101,35 @@ Build -> Rebuild Project 해서 해결함
 
 ## 3. 수정 로직
 기존 내용을 불러오는 화면 (GET) + 바뀐 내용을 저장하는 로직 (POST) 그리고 `edit.html` 설정
-1. `edit.html`은 기존 내용이 입력창에 적혀있고, 글번호(id)를 hidden 하게 들고 있어야함
-
+1) `edit.html`은 기존 내용이 입력창에 적혀있고, 글번호(id)를 hidden 하게 들고 있어야함
+2) 수정시에 서버는 몇번 글을 고치고 있는지에 대해 알고 있어야 한다 = 사용자 눈에x 서버로는 id를 보내주는 장치가 필요함
+`<input type="hidden" name="id" th:value="${board.id}">`
+3) 수정은 두단계로 나누어 진행됨. 고칠테니 화면 보여줘 = `edit.html`, 이제 db에 저장해줘 = update(덮어쓰기)
+4) 따라서 전체적인 과정은 다음과 같다
+```@GetMapping("/board/edit")
+public String editPage(Long id, Model model) {
+    // DB에서 기존 내용을 꺼내서 'board'라는 이름으로 화면에 전달!
+    model.addAttribute("board", boardService.findBoardById(id));
+    return "edit";
+}
+@PostMapping("/board/update")
+public String updateProcess(BoardDomain board) {
+    boardService.registerBoard(board); // 이 안에서 .save()가 실행됨
+    return "redirect:/board/list";
+}
+```
+5) `boardRepository.save()`매서드는 jpa에서 id를 가지고 수정과 생성을 구분해준다!!!
+> 여기까지 정리 = 1. 목록에서 제목 클릭 (상세 보기로 이동)
+> 2. 상세 보기에서 Edit 클릭 -> 서버가 기존 내용을 edit.html에 채워서 보여줌 
+> 3. 수정 페이지에서 내용을 고치고 Update 클릭 -> 이때 ID값도 몰래 같이 전송됨 
+> 4. 서버는 ID가 포함된 데이터를 받고 save()를 실행 -> 기존 글을 업데이트함!
 
 # DAY2 - 회원관리 기능 만들기
 ## 1. 회원 가입 기능
+1) JPA는 findBy로 찾는다 = `Optional<MemberDomain> findByLoginId(String loginId);`
+2) http://localhost:8080/member/signup 접속하면 됨
+
+## 2. 로그인 과 세션 구현하기
+1) `login.html` 로그인 화면 만들기
+2) MemberController 로그인 로직 추가하기
+3) 
